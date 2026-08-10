@@ -1,0 +1,364 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         String        @default("ADMIN") // SUPER_ADMIN | ADMIN | EDITOR | VIEWER
+  avatarUrl    String?
+  status       String        @default("ACTIVE")
+  lastLogin    DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  sessions     Session[]
+  activityLogs ActivityLog[]
+  blogPosts    BlogPost[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  name            String   @default("Rizwan Saeed")
+  title           String   @default("Digital Marketing Manager, Performance Marketer & Shopify Developer")
+  shortBio        String
+  fullBio         String
+  photoUrl        String
+  location        String   @default("Multan, Pakistan")
+  email           String   @default("Hello@RizwanSaddique.site")
+  phone           String   @default("+92 306 4402649")
+  whatsapp        String   @default("+923064402649")
+  linkedin        String   @default("https://linkedin.com/in/rizwansaeed610")
+  yearsExperience String   @default("5+ Years")
+  marketsServed   String   @default("UAE · USA · UK")
+  cvFileUrl       String?
+  updatedAt       DateTime @updatedAt
+}
+
+model NavigationItem {
+  id           String   @id @default(cuid())
+  label        String
+  url          String
+  displayOrder Int      @default(0)
+  location     String   @default("HEADER") // HEADER or FOOTER
+  openNewTab   Boolean  @default(false)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model HomepageHero {
+  id                String   @id @default(cuid())
+  smallLabel        String   @default("Available for selected international projects")
+  name              String   @default("Rizwan Saeed")
+  title             String   @default("Digital Growth Specialist")
+  mainHeading       String   @default("Need More Qualified Leads, Online Sales and Measurable ROI?")
+  supportingText    String   @default("I help businesses grow through performance marketing, high-converting websites, Shopify development and intelligent automation.")
+  subheadline       String   @default("Digital Marketing Manager and Shopify Developer with 5+ years of international experience across the UAE, USA and UK.")
+  primaryCtaText    String   @default("Book a Free Strategy Call")
+  primaryCtaUrl     String   @default("/contact")
+  secondaryCtaText  String   @default("View My Results")
+  secondaryCtaUrl   String   @default("/results")
+  auditLinkText     String   @default("Request a Free Website or Ads Audit")
+  auditLinkUrl      String   @default("/contact?type=audit")
+  portraitImage     String   @default("/images/rizwan-saeed.png")
+  availabilityBadge String   @default("Available for selected international projects")
+  active            Boolean  @default(true)
+  updatedAt         DateTime @updatedAt
+}
+
+model Tool {
+  id           String   @id @default(cuid())
+  name         String
+  category     String   @default("Performance Marketing")
+  icon         String?
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Service {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  headline         String
+  shortDescription String
+  fullDescription  String
+  iconName         String   @default("TrendingUp")
+  featuredImage    String?
+  deliverablesJson String // JSON stored string array
+  benefitsJson     String // JSON stored string array
+  processStepsJson String // JSON stored object array
+  ctaText          String   @default("Discuss This Service")
+  ctaUrl           String   @default("/contact")
+  seoTitle         String?
+  seoDescription   String?
+  ogImage          String?
+  status           String   @default("PUBLISHED") // DRAFT | PUBLISHED
+  featured         Boolean  @default(false)
+  displayOrder     Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Result {
+  id           String   @id @default(cuid())
+  title        String
+  metric       String
+  subtitle     String
+  description  String
+  category     String   @default("revenue")
+  image        String?
+  displayOrder Int      @default(0)
+  status       String   @default("PUBLISHED") // DRAFT | PUBLISHED
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model CaseStudy {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  clientName     String
+  isConfidential Boolean  @default(false)
+  industry       String
+  country        String
+  challenge      String
+  strategy       String
+  solution       String
+  result         String
+  keyOutcome     String
+  servicesUsed   String // JSON array string
+  publishedDate  DateTime @default(now())
+  status         String   @default("PUBLISHED") // DRAFT | PUBLISHED
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Experience {
+  id               String   @id @default(cuid())
+  role             String
+  company          String
+  location         String
+  period           String
+  isCurrent        Boolean  @default(false)
+  isFeatured       Boolean  @default(true)
+  responsibilities String // JSON array string
+  companyUrl       String?
+  displayOrder     Int      @default(0)
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model ProcessStep {
+  id           String   @id @default(cuid())
+  stepNumber   String
+  title        String
+  description  String
+  icon         String   @default("Search")
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model FAQ {
+  id           String   @id @default(cuid())
+  question     String
+  answer       String
+  category     String   @default("General")
+  displayOrder Int      @default(0)
+  status       String   @default("PUBLISHED") // DRAFT | PUBLISHED
+  enableSchema Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BlogCategory {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  posts       BlogPost[]
+}
+
+model BlogPost {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  excerpt         String
+  directAnswer    String
+  content         String
+  featuredImage   String?
+  readTime        String        @default("5 min read")
+  categoryId      String?
+  category        BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags            String        @default("[]") // JSON string array
+  authorId        String?
+  author          User?         @relation(fields: [authorId], references: [id])
+  publishedAt     DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  status          String        @default("PUBLISHED") // DRAFT | PUBLISHED | SCHEDULED
+  featured        Boolean       @default(false)
+  seoTitle        String?
+  metaDescription String?
+  canonicalUrl    String?
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  noIndex         Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+}
+
+model Media {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  url          String
+  createdAt    DateTime @default(now())
+}
+
+model Lead {
+  id               String     @id @default(cuid())
+  fullName         String
+  email            String
+  phone            String
+  company          String?
+  website          String?
+  country          String
+  requiredService  String
+  monthlyBudget    String
+  mainGoal         String
+  projectDetails   String
+  preferredContact String     @default("Email")
+  consent          Boolean    @default(true)
+  status           String     @default("NEW") // NEW | CONTACTED | QUALIFIED | PROPOSAL_SENT | WON | LOST | SPAM
+  notes            LeadNote[]
+  utmSource        String?
+  utmMedium        String?
+  utmCampaign      String?
+  ipAddress        String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author    String   @default("Admin")
+  text      String
+  createdAt DateTime @default(now())
+}
+
+model AuditRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  website   String?
+  status    String   @default("NEW") // NEW | REVIEWING | COMPLETED | FOLLOW_UP | CLOSED
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Redirect {
+  id           String   @id @default(cuid())
+  oldUrl       String   @unique
+  newUrl       String
+  redirectType String   @default("301") // 301 | 302
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SEOSetting {
+  id                    String   @id @default(cuid())
+  pagePath              String   @unique
+  seoTitle              String
+  metaDescription       String
+  canonicalUrl          String?
+  ogTitle               String?
+  ogDescription         String?
+  ogImage               String?
+  twitterTitle          String?
+  twitterDescription    String?
+  twitterImage          String?
+  noIndex               Boolean  @default(false)
+  noFollow              Boolean  @default(false)
+  structuredDataEnabled Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model SocialLink {
+  id           String   @id @default(cuid())
+  platform     String
+  url          String
+  icon         String?
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName  String   @default("System")
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  timestamp DateTime @default(now())
+}
+
+model LegalPage {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  badgeText      String   @default("Legal Document")
+  lastUpdated    String   @default("August 8, 2026")
+  noticeText     String?
+  sectionsJson   String   // JSON array of { title: string, content: string }
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
