@@ -7,8 +7,8 @@ async function main() {
   console.log("Seeding database with Rizwan Saeed CV data & Admin credentials...");
 
   // 1. Initial Admin User
-  const adminEmail = process.env.ADMIN_EMAIL || "Hello@RizwanSaddique.site";
-  const initialPassword = process.env.ADMIN_INITIAL_PASSWORD || "AdminPass123!";
+  const adminEmail = process.env.ADMIN_EMAIL || "rizwansaeed610@gmail.com";
+  const initialPassword = process.env.ADMIN_INITIAL_PASSWORD || "McSe2008@@@";
   const passwordHash = hashPassword(initialPassword);
 
   const admin1 = await prisma.user.upsert({

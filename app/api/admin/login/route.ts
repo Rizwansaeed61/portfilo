@@ -6,28 +6,39 @@ import { logActivity } from "@/lib/activity-log";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, error: "Invalid request format. Please provide valid JSON." },
+        { status: 400 }
+      );
+    }
 
-    if (!email || !password) {
+    const { email, password } = body || {};
+
+    if (!email || !password || typeof email !== "string" || typeof password !== "string") {
       return NextResponse.json(
         { success: false, error: "Please enter both email and password." },
         { status: 400 }
       );
     }
 
-    const trimmedEmail = email.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // Find user by email (case-insensitive)
     const user = await prisma.user.findFirst({
       where: {
         OR: [
           { email: trimmedEmail },
-          { email: trimmedEmail.toLowerCase() },
+          { email: email.trim() },
         ],
       },
     });
 
     if (!user) {
-      await logActivity({ action: "LOGIN_FAILED", entity: "User", details: `Failed email: ${email}` });
+      logActivity({ action: "LOGIN_FAILED", entity: "User", details: `Failed email attempt: ${email}` }).catch(() => {});
       return NextResponse.json(
         { success: false, error: "Invalid email or password." },
         { status: 401 }
@@ -36,18 +47,22 @@ export async function POST(request: Request) {
 
     const passwordValid = verifyPassword(password, user.passwordHash);
     if (!passwordValid) {
-      await logActivity({ userId: user.id, userName: user.name, action: "LOGIN_FAILED", entity: "User" });
+      logActivity({ userId: user.id, userName: user.name, action: "LOGIN_FAILED", entity: "User" }).catch(() => {});
       return NextResponse.json(
         { success: false, error: "Invalid email or password." },
         { status: 401 }
       );
     }
 
-    // Update last login
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { lastLogin: new Date() },
-    });
+    // Update last login timestamp
+    try {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { lastLogin: new Date() },
+      });
+    } catch (dbErr) {
+      console.warn("Could not update lastLogin timestamp:", dbErr);
+    }
 
     // Create session cookie
     await createAdminSession({
@@ -57,13 +72,18 @@ export async function POST(request: Request) {
       role: user.role,
     });
 
-    await logActivity({ userId: user.id, userName: user.name, action: "LOGIN_SUCCESS", entity: "User" });
+    logActivity({ userId: user.id, userName: user.name, action: "LOGIN_SUCCESS", entity: "User" }).catch(() => {});
 
     return NextResponse.json({ success: true, message: "Logged in successfully." });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Login API Error:", err);
     return NextResponse.json(
-      { success: false, error: "An unexpected error occurred during login." },
+      { 
+        success: false, 
+        error: process.env.NODE_ENV === "development" && err?.message 
+          ? `Login error: ${err.message}` 
+          : "Invalid email or password. Please check your credentials and try again." 
+      },
       { status: 500 }
     );
   }

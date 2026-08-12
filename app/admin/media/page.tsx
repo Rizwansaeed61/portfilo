@@ -3,7 +3,7 @@ import { getAdminSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import { MediaLibraryUploadClient } from "@/components/admin/MediaLibraryUploadClient";
 import { formatDate } from "@/lib/utils";
 import { Image as ImageIcon, Copy, FileText } from "lucide-react";
 import Image from "next/image";
@@ -24,13 +24,7 @@ export default async function AdminMediaPage() {
       />
 
       {/* Upload Zone */}
-      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-4">
-        <h2 className="text-lg font-bold text-slate-900 font-serif flex items-center gap-2">
-          <ImageIcon className="h-5 w-5 text-teal-700" />
-          Upload New Image Asset
-        </h2>
-        <ImageUploader value="" onChange={() => redirect("/admin/media")} />
-      </div>
+      <MediaLibraryUploadClient />
 
       {/* Media Grid */}
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-4">

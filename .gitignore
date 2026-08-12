@@ -34,4 +34,5 @@ next-env.d.ts
 *.pem
 *.zip
 *.db
+*.tar.gz
 
