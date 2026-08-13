@@ -11,14 +11,12 @@ import {
   Eye,
   EyeOff,
   AlertCircle,
-  KeyRound,
-  Sparkles,
 } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("rizwansaeed610@gmail.com");
-  const [password, setPassword] = useState("McSe2008@@@");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -48,12 +46,6 @@ export default function AdminLoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickFill = () => {
-    setEmail("rizwansaeed610@gmail.com");
-    setPassword("McSe2008@@@");
-    setErrorMsg(null);
   };
 
   return (
@@ -97,7 +89,7 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="rizwansaeed610@gmail.com"
+                placeholder="Email or Username"
                 className="w-full rounded-xl border border-slate-600 bg-slate-900/80 pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
               />
             </div>
@@ -146,34 +138,7 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        {/* Credentials Prompt Box */}
-        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
-              <KeyRound className="h-3.5 w-3.5" />
-              Super Admin Credentials Prompt
-            </span>
-            <button
-              type="button"
-              onClick={handleQuickFill}
-              className="text-[10px] font-bold text-teal-300 hover:text-white bg-teal-950 px-2 py-0.5 rounded border border-teal-800 flex items-center gap-1"
-            >
-              <Sparkles className="h-3 w-3" /> Auto Fill
-            </button>
-          </div>
-          <div className="text-xs space-y-1 text-slate-300 font-mono">
-            <p>
-              <span className="text-slate-500">Username:</span>{" "}
-              <strong className="text-white">rizwansaeed610@gmail.com</strong>
-            </p>
-            <p>
-              <span className="text-slate-500">Password:</span>{" "}
-              <strong className="text-teal-300">McSe2008@@@</strong>
-            </p>
-          </div>
-        </div>
-
-        <div className="pt-1 text-[11px] text-slate-400 flex items-center justify-center gap-1.5">
+        <div className="pt-1 text-[11px] text-slate-400 flex items-center justify-center gap-1.5 border-t border-slate-700/60 pt-4">
           <ShieldCheck className="h-4 w-4 text-teal-400" />
           <span>Encrypted Session • Full Admin Privileges</span>
         </div>
