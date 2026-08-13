@@ -10,8 +10,8 @@ export default function AdminSeoSettingsPage() {
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    domain: "https://rizwansaeed.com",
-    sitemapUrl: "https://rizwansaeed.com/sitemap.xml",
+    domain: "https://rizwansaddique.site",
+    sitemapUrl: "https://rizwansaddique.site/sitemap.xml",
     crawlerConcurrency: 3,
     requestTimeoutMs: 10000,
     maxPagesPerRun: 500,

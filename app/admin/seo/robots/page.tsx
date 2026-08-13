@@ -10,7 +10,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://rizwansaeed.com/sitemap.xml`;
+Sitemap: https://rizwansaddique.site/sitemap.xml`;
 
   return (
     <div className="space-y-8">
@@ -41,7 +41,7 @@ Sitemap: https://rizwansaeed.com/sitemap.xml`;
             <FileText className="h-5 w-5 text-teal-700" />
             <h3 className="font-bold text-slate-900 text-base font-serif">Live Robots.txt Content</h3>
           </div>
-          <span className="font-mono text-xs text-teal-800 font-bold">https://rizwansaeed.com/robots.txt</span>
+          <span className="font-mono text-xs text-teal-800 font-bold">https://rizwansaddique.site/robots.txt</span>
         </div>
 
         <pre className="p-5 rounded-xl bg-slate-900 text-emerald-400 font-mono text-xs leading-relaxed border border-slate-800">

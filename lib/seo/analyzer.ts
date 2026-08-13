@@ -184,7 +184,7 @@ export class SeoPageAnalyzer {
           "@context": "https://schema.org",
           "@type": routePath === "/services" ? "ProfessionalService" : "Person",
           name: "Rizwan Saeed",
-          url: `https://rizwansaeed.com${routePath}`,
+          url: `https://rizwansaddique.site${routePath}`,
         }),
       },
     ];
@@ -197,14 +197,14 @@ export class SeoPageAnalyzer {
 
     const audit: SeoPageAudit = {
       id: `audit-${routePath.replace(/\//g, "-") || "home"}`,
-      url: `https://rizwansaeed.com${routePath}`,
-      normalizedUrl: `https://rizwansaeed.com${routePath}`,
+      url: `https://rizwansaddique.site${routePath}`,
+      normalizedUrl: `https://rizwansaddique.site${routePath}`,
       statusCode: 200,
       title: metaTitle || "Rizwan Saeed Portfolio",
       titleLength: titleLen,
       metaDescription: metaDescription || "Digital growth consulting services.",
       metaDescriptionLength: descLen,
-      canonicalUrl: canonicalUrl || `https://rizwansaeed.com${routePath}`,
+      canonicalUrl: canonicalUrl || `https://rizwansaddique.site${routePath}`,
       h1Text: metaTitle,
       h1Count: 1,
       headingsHierarchyValid: true,

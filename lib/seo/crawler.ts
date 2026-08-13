@@ -10,7 +10,7 @@ export class SafeSeoCrawler {
 
   constructor(config?: Partial<SeoSettingsConfig>) {
     this.allowedDomains = [
-      "rizwansaeed.com",
+      "rizwansaddique.site",
       "workflows-starter-template.rizwansaeed610.workers.dev",
       "localhost",
       "127.0.0.1",
@@ -72,7 +72,7 @@ export class SafeSeoCrawler {
    * Normalizes URL for duplicate detection
    * Handles trailing slashes, fragments (#), case sensitivity, tracking query parameters
    */
-  public normalizeUrl(url: string, baseUrl: string = "https://rizwansaeed.com"): string {
+  public normalizeUrl(url: string, baseUrl: string = "https://rizwansaddique.site"): string {
     try {
       let absolute = url;
       if (url.startsWith("/")) {
