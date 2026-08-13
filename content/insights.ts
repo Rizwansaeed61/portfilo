@@ -6,6 +6,7 @@ export interface InsightArticle {
   updatedAt: string;
   readTime: string;
   category: string;
+  featuredImage?: string;
   author: {
     name: string;
     role: string;
@@ -25,6 +26,7 @@ export const insightsData: InsightArticle[] = [
     updatedAt: "2026-08-01",
     readTime: "6 min read",
     category: "Performance Marketing",
+    featuredImage: "/images/insights/performance-marketing.jpg",
     author: {
       name: "Rizwan Saeed",
       role: "Digital Marketing Manager & Shopify Developer",
@@ -58,6 +60,7 @@ When businesses expand paid ad spend from domestic markets to high-competition r
     updatedAt: "2026-07-28",
     readTime: "5 min read",
     category: "Shopify Development",
+    featuredImage: "/images/insights/shopify-cro.jpg",
     author: {
       name: "Rizwan Saeed",
       role: "Digital Marketing Manager & Shopify Developer",
@@ -87,6 +90,7 @@ Studies consistently prove that every 1-second delay in mobile store loading lea
     updatedAt: "2026-08-05",
     readTime: "7 min read",
     category: "SEO & AI Search",
+    featuredImage: "/images/insights/ai-search-geo.jpg",
     author: {
       name: "Rizwan Saeed",
       role: "Digital Marketing Manager & Shopify Developer",

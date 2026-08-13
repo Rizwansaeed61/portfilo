@@ -10,9 +10,14 @@ export default async function AdminSeoPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const seoSettings = await prisma.sEOSetting.findMany({
-    orderBy: { pagePath: "asc" },
-  });
+  let seoSettings: any[] = [];
+  try {
+    seoSettings = await prisma.sEOSetting.findMany({
+      orderBy: { pagePath: "asc" },
+    }).catch(() => []);
+  } catch {
+    seoSettings = [];
+  }
 
   return (
     <div className="space-y-6">

@@ -10,9 +10,14 @@ export default async function AdminRedirectsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const redirects = await prisma.redirect.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let redirects: any[] = [];
+  try {
+    redirects = await prisma.redirect.findMany({
+      orderBy: { createdAt: "desc" },
+    }).catch(() => []);
+  } catch {
+    redirects = [];
+  }
 
   return (
     <div className="space-y-6">

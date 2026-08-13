@@ -12,9 +12,14 @@ export default async function AdminMediaPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const mediaFiles = await prisma.media.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let mediaFiles: any[] = [];
+  try {
+    mediaFiles = await prisma.media.findMany({
+      orderBy: { createdAt: "desc" },
+    }).catch(() => []);
+  } catch {
+    mediaFiles = [];
+  }
 
   return (
     <div className="space-y-8">

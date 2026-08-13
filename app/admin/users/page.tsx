@@ -14,9 +14,14 @@ export default async function AdminUsersPage() {
     redirect("/admin");
   }
 
-  const rawUsers = await prisma.user.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let rawUsers: any[] = [];
+  try {
+    rawUsers = await prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+    }).catch(() => []);
+  } catch {
+    rawUsers = [];
+  }
 
   const users = rawUsers.map((u) => ({
     ...u,

@@ -9,14 +9,19 @@ export default async function AdminActivityLogsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const rawLogs = await prisma.activityLog.findMany({
-    orderBy: { timestamp: "desc" },
-    take: 50,
-  });
+  let rawLogs: any[] = [];
+  try {
+    rawLogs = await prisma.activityLog.findMany({
+      orderBy: { timestamp: "desc" },
+      take: 50,
+    }).catch(() => []);
+  } catch {
+    rawLogs = [];
+  }
 
   const logs = rawLogs.map((log) => ({
     ...log,
-    timestamp: log.timestamp.toISOString(),
+    timestamp: log.timestamp ? log.timestamp.toISOString() : new Date().toISOString(),
   }));
 
   return (

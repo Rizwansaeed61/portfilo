@@ -16,10 +16,15 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
   if (!session) redirect("/admin/login");
 
   const { id } = await params;
-  const lead = await prisma.lead.findUnique({
-    where: { id },
-    include: { notes: true },
-  });
+  let lead: any = null;
+  try {
+    lead = await prisma.lead.findUnique({
+      where: { id },
+      include: { notes: true },
+    });
+  } catch {
+    lead = null;
+  }
 
   if (!lead) {
     notFound();

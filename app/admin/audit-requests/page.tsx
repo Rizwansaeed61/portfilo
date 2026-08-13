@@ -9,13 +9,18 @@ export default async function AdminAuditRequestsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const rawAuditRequests = await prisma.auditRequest.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let rawAuditRequests: any[] = [];
+  try {
+    rawAuditRequests = await prisma.auditRequest.findMany({
+      orderBy: { createdAt: "desc" },
+    }).catch(() => []);
+  } catch {
+    rawAuditRequests = [];
+  }
 
   const auditRequests = rawAuditRequests.map((item) => ({
     ...item,
-    createdAt: item.createdAt.toISOString(),
+    createdAt: item.createdAt ? item.createdAt.toISOString() : new Date().toISOString(),
   }));
 
   return (

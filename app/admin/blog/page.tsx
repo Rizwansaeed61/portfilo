@@ -8,6 +8,8 @@ import { Plus, FolderTree } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { BlogTableClient } from "@/components/admin/BlogTableClient";
 
+import { insightsData } from "@/content/insights";
+
 export default async function AdminBlogPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
@@ -20,6 +22,19 @@ export default async function AdminBlogPage() {
     }).catch(() => []);
   } catch {
     posts = [];
+  }
+
+  if (!posts || posts.length === 0) {
+    posts = insightsData.map((article, idx) => ({
+      id: `post-${idx + 1}`,
+      slug: article.slug,
+      title: article.title,
+      excerpt: article.description,
+      status: "PUBLISHED",
+      category: { name: article.category },
+      updatedAt: article.updatedAt,
+      author: { name: article.author.name },
+    }));
   }
 
   return (

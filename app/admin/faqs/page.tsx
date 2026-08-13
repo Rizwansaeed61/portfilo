@@ -6,13 +6,32 @@ import { PageHeader } from "@/components/admin/PageHeader";
 import { FaqsTableClient } from "@/components/admin/FaqsTableClient";
 import { Plus } from "lucide-react";
 
+import { faqsData } from "@/content/faqs";
+
 export default async function AdminFaqsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const faqs = await prisma.fAQ.findMany({
-    orderBy: { displayOrder: "asc" },
-  });
+  let faqs: any[] = [];
+  try {
+    faqs = await prisma.fAQ.findMany({
+      orderBy: { displayOrder: "asc" },
+    }).catch(() => []);
+  } catch {
+    faqs = [];
+  }
+
+  if (!faqs || faqs.length === 0) {
+    faqs = faqsData.map((f, idx) => ({
+      id: f.id,
+      question: f.question,
+      answer: f.answer,
+      category: f.category || "General",
+      displayOrder: idx + 1,
+      status: "PUBLISHED",
+      enableSchema: true,
+    }));
+  }
 
   return (
     <div className="space-y-6">

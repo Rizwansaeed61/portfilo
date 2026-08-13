@@ -2,6 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
@@ -112,6 +113,19 @@ export default async function InsightArticlePage({ params }: InsightArticlePageP
 
       <section className="bg-white py-12 sm:py-16 border-b border-slate-200/60">
         <Container size="narrow">
+          {article.featuredImage && (
+            <div className="mb-10 relative aspect-video w-full rounded-2xl overflow-hidden shadow-md border border-slate-200">
+              <Image
+                src={article.featuredImage}
+                alt={article.title}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 800px"
+                className="object-cover"
+              />
+            </div>
+          )}
+
           {/* Direct Answer Featured Snippet Box */}
           <div className="mb-10 p-6 rounded-2xl bg-warm-50 border-2 border-emerald-500/40 shadow-xs space-y-2">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
