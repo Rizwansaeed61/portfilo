@@ -66,7 +66,35 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [systemOpen, setSystemOpen] = useState(false);
 
-  const isActive = (path: string) => pathname === path || (path !== "/admin" && pathname.startsWith(path));
+  const isActive = (path: string) => {
+    if (path === "/admin") return pathname === "/admin";
+    if (path === "/admin/seo") {
+      return (
+        pathname === "/admin/seo" ||
+        pathname === "/admin/seo/new" ||
+        (pathname.startsWith("/admin/seo/") &&
+          !pathname.startsWith("/admin/seo/audit") &&
+          !pathname.startsWith("/admin/seo/issues") &&
+          !pathname.startsWith("/admin/seo/pages") &&
+          !pathname.startsWith("/admin/seo/search-console") &&
+          !pathname.startsWith("/admin/seo/keywords") &&
+          !pathname.startsWith("/admin/seo/indexing") &&
+          !pathname.startsWith("/admin/seo/web-vitals") &&
+          !pathname.startsWith("/admin/seo/technical") &&
+          !pathname.startsWith("/admin/seo/internal-links") &&
+          !pathname.startsWith("/admin/seo/broken-links") &&
+          !pathname.startsWith("/admin/seo/images") &&
+          !pathname.startsWith("/admin/seo/schema") &&
+          !pathname.startsWith("/admin/seo/sitemap") &&
+          !pathname.startsWith("/admin/seo/robots") &&
+          !pathname.startsWith("/admin/seo/redirects") &&
+          !pathname.startsWith("/admin/seo/404-monitor") &&
+          !pathname.startsWith("/admin/seo/history") &&
+          !pathname.startsWith("/admin/seo/settings"))
+      );
+    }
+    return pathname === path || pathname.startsWith(`${path}/`);
+  };
 
   const navItemClass = (path: string) =>
     `flex items-center gap-3 px-3 py-2 text-xs font-semibold rounded-lg transition-colors duration-150 ${
