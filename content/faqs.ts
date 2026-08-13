@@ -3,6 +3,9 @@ export interface FaqItem {
   question: string;
   answer: string;
   category?: string;
+  displayOrder?: number;
+  enableSchema?: boolean;
+  status?: string;
 }
 
 export const faqsData: FaqItem[] = [
