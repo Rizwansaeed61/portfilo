@@ -59,8 +59,8 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
   const [contentOpen, setContentOpen] = useState(true);
   const [blogOpen, setBlogOpen] = useState(true);
   const [leadsOpen, setLeadsOpen] = useState(true);
-  const [seoOpen, setSeoOpen] = useState(false);
-  const [appearanceOpen, setAppearanceOpen] = useState(false);
+  const [seoOpen, setSeoOpen] = useState(true);
+  const [appearanceOpen, setAppearanceOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [systemOpen, setSystemOpen] = useState(false);
 
@@ -240,14 +240,19 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               </Link>
             </div>
 
-            {/* SEO Group */}
+            {/* SEO & Yoast Plugin Group */}
             <div>
               <button
                 type="button"
                 onClick={() => setSeoOpen(!seoOpen)}
                 className={groupHeaderClass}
               >
-                <span>SEO & Redirects</span>
+                <div className="flex items-center gap-1.5">
+                  <span>SEO & Plugins</span>
+                  <span className="bg-emerald-100 text-emerald-800 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-300">
+                    Yoast / Rank Math
+                  </span>
+                </div>
                 <ChevronDown
                   className={`h-3.5 w-3.5 transition-transform ${seoOpen ? "rotate-180" : ""}`}
                 />
@@ -255,12 +260,17 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               {seoOpen && (
                 <div className="mt-1 space-y-0.5 pl-2">
                   <Link href="/admin/seo" onClick={onMobileClose} className={navItemClass("/admin/seo")}>
-                    <Search className="h-3.5 w-3.5" />
-                    <span>Page SEO Settings</span>
+                    <Search className="h-3.5 w-3.5 text-emerald-600" />
+                    <div className="flex items-center justify-between w-full">
+                      <span>Rank Math & Yoast SEO</span>
+                      <span className="bg-teal-100 text-teal-800 text-[9px] font-extrabold px-1.5 py-0.2 rounded">
+                        PRO
+                      </span>
+                    </div>
                   </Link>
                   <Link href="/admin/redirects" onClick={onMobileClose} className={navItemClass("/admin/redirects")}>
                     <ArrowRightLeft className="h-3.5 w-3.5" />
-                    <span>Redirects</span>
+                    <span>URL Redirects</span>
                   </Link>
                 </div>
               )}
