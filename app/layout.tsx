@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import {
+  Poppins,
   Plus_Jakarta_Sans,
   Playfair_Display,
   Inter,
@@ -12,6 +13,13 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { getPersonSchema, getProfessionalServiceSchema, getWebSiteSchema } from "@/lib/schema";
 import { siteConfig } from "@/content/site-config";
 import { SiteLayout } from "@/components/layout/SiteLayout";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -116,7 +124,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${plusJakartaSans.variable} ${playfairDisplay.variable} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${montserrat.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${poppins.variable} ${plusJakartaSans.variable} ${playfairDisplay.variable} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${montserrat.variable}`}>
       <head>
         <JsonLd data={[getPersonSchema(), getProfessionalServiceSchema(), getWebSiteSchema()]} />
       </head>

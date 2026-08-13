@@ -44,8 +44,9 @@ const config: Config = {
         }
       },
       fontFamily: {
+        poppins: ["var(--font-poppins)", "Poppins", "sans-serif"],
+        sans: ["var(--font-poppins)", "Poppins", "var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
         serif: ["var(--font-serif)", "Playfair Display", "Georgia", "serif"],
-        sans: ["var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
       },
       maxWidth: {
         "7xl": "80rem", // 1280px
