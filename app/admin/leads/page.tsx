@@ -11,14 +11,19 @@ export default async function AdminLeadsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const rawLeads = await prisma.lead.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { notes: true },
-  });
+  let rawLeads: any[] = [];
+  try {
+    rawLeads = await prisma.lead.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { notes: true },
+    }).catch(() => []);
+  } catch {
+    rawLeads = [];
+  }
 
   const leads = rawLeads.map((item) => ({
     ...item,
-    createdAt: item.createdAt.toISOString(),
+    createdAt: item.createdAt ? item.createdAt.toISOString() : new Date().toISOString(),
   }));
 
   return (

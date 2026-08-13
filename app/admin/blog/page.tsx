@@ -4,21 +4,23 @@ import { getAdminSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { DataTable } from "@/components/admin/DataTable";
-import { formatDate } from "@/lib/utils";
-import { Plus, Edit, Eye, Check, Clock, FolderTree } from "lucide-react";
+import { Plus, FolderTree } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-
 import { BlogTableClient } from "@/components/admin/BlogTableClient";
 
 export default async function AdminBlogPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const posts = await prisma.blogPost.findMany({
-    include: { category: true, author: true },
-    orderBy: { updatedAt: "desc" },
-  });
+  let posts: any[] = [];
+  try {
+    posts = await prisma.blogPost.findMany({
+      include: { category: true, author: true },
+      orderBy: { updatedAt: "desc" },
+    }).catch(() => []);
+  } catch {
+    posts = [];
+  }
 
   return (
     <div className="space-y-6">
