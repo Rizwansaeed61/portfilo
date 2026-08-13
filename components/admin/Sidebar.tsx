@@ -35,6 +35,7 @@ import {
   ChevronDown,
   Globe,
   FileCheck,
+  MessageSquare,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -253,6 +254,10 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                   <Link href="/admin/leads" onClick={onMobileClose} className={navItemClass("/admin/leads")}>
                     <Mail className="h-3.5 w-3.5" />
                     <span>Contact Inquiries</span>
+                  </Link>
+                  <Link href="/admin/chat-widget" onClick={onMobileClose} className={navItemClass("/admin/chat-widget")}>
+                    <MessageSquare className="h-3.5 w-3.5 text-[#00a896]" />
+                    <span>Chat Widget & Calendar</span>
                   </Link>
                   <Link href="/admin/audit-requests" onClick={onMobileClose} className={navItemClass("/admin/audit-requests")}>
                     <ShieldAlert className="h-3.5 w-3.5" />

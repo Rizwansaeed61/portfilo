@@ -131,13 +131,16 @@ export function Header() {
 
             {/* Desktop Action CTA Button */}
             <div className="hidden lg:flex items-center gap-3">
-              <Link
-                href="/contact"
-                onClick={() => handleCtaClick("strategy_call")}
-                className="bg-[#00a896] hover:bg-[#028090] text-white px-6 py-2.5 rounded-full font-extrabold text-xs tracking-wider uppercase transition-all shadow-lg hover:shadow-emerald-500/20 hover:scale-105 active:scale-95 flex items-center gap-1.5"
+              <button
+                type="button"
+                onClick={() => {
+                  handleCtaClick("strategy_call");
+                  window.dispatchEvent(new CustomEvent("open-chat-widget"));
+                }}
+                className="bg-[#00a896] hover:bg-[#028090] text-white px-6 py-2.5 rounded-full font-extrabold text-xs tracking-wider uppercase transition-all shadow-lg hover:shadow-emerald-500/20 hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer"
               >
                 <span>Let's Talk</span>
-              </Link>
+              </button>
             </div>
 
             {/* Mobile Navigation Trigger */}
