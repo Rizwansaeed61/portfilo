@@ -13,6 +13,21 @@ export const metadata = {
   alternates: {
     canonical: `${siteConfig.url}/services`,
   },
+  openGraph: {
+    title: "Digital Growth Services — Meta Ads, Google Ads & Shopify Development",
+    description: "Integrated digital marketing, Shopify web development, and CRO services for international brands.",
+    url: `${siteConfig.url}/services`,
+    siteName: siteConfig.name,
+    images: [{ url: `${siteConfig.url}/images/rizwan-saeed.jpg`, width: 1200, height: 630 }],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Growth Services | Rizwan Saeed Specialist",
+    description: "Performance ad management, Shopify development, and B2B lead generation across UAE, USA, and UK.",
+    images: [`${siteConfig.url}/images/rizwan-saeed.jpg`],
+  },
 };
 
 export default function ServicesOverviewPage() {

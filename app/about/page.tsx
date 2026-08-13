@@ -12,9 +12,25 @@ import { Shield, Target, Sparkles, Award } from "lucide-react";
 export const metadata = {
   title: "About Rizwan Saeed | Digital Marketing Manager & Shopify Developer",
   description:
-    "Learn about Rizwan Saeed's 5+ years of experience managing performance ad spend and Shopify builds for UAE, USA, and UK businesses.",
+    "Discover Rizwan Saeed's 5+ years of hands-on experience scaling performance ad campaigns, Shopify themes, CAPI tracking, and B2B lead generation across UAE, USA, and UK.",
   alternates: {
     canonical: `${siteConfig.url}/about`,
+  },
+  openGraph: {
+    title: "About Rizwan Saeed | Digital Growth & Shopify Specialist",
+    description:
+      "5+ years of performance marketing, Shopify development, and digital growth engineering in UAE, USA, and UK.",
+    url: `${siteConfig.url}/about`,
+    siteName: siteConfig.name,
+    images: [{ url: `${siteConfig.url}/images/rizwan-saeed.jpg`, width: 1200, height: 630 }],
+    locale: "en_US",
+    type: "profile",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Rizwan Saeed | Digital Growth & Shopify Specialist",
+    description: "5+ years of performance marketing, Shopify development, and digital growth engineering.",
+    images: [`${siteConfig.url}/images/rizwan-saeed.jpg`],
   },
 };
 
