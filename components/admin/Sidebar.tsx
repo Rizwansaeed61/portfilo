@@ -242,7 +242,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               </Link>
             </div>
 
-            {/* SEO Command Center Group */}
+            {/* SEO Command Center & Plugins Group */}
             <div>
               <button
                 type="button"
@@ -250,9 +250,9 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                 className={groupHeaderClass}
               >
                 <div className="flex items-center gap-1.5">
-                  <span>SEO Command Center</span>
+                  <span>SEO & Plugins</span>
                   <span className="bg-emerald-100 text-emerald-800 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-300">
-                    Pro Suite
+                    Yoast / Rank Math
                   </span>
                 </div>
                 <ChevronDown
@@ -263,79 +263,84 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                 <div className="mt-1 space-y-0.5 pl-2">
                   <Link href="/admin/seo" onClick={onMobileClose} className={navItemClass("/admin/seo")}>
                     <Search className="h-3.5 w-3.5 text-emerald-600" />
-                    <span>SEO Overview</span>
+                    <div className="flex items-center justify-between w-full">
+                      <span>Rank Math & Yoast SEO</span>
+                      <span className="bg-teal-100 text-teal-800 text-[9px] font-extrabold px-1.5 py-0.2 rounded">
+                        PRO
+                      </span>
+                    </div>
                   </Link>
                   <Link href="/admin/seo/audit" onClick={onMobileClose} className={navItemClass("/admin/seo/audit")}>
-                    <Activity className="h-3.5 w-3.5" />
-                    <span>Site Audit</span>
+                    <Activity className="h-3.5 w-3.5 text-teal-600" />
+                    <span>Site Audit Hub</span>
                   </Link>
                   <Link href="/admin/seo/issues" onClick={onMobileClose} className={navItemClass("/admin/seo/issues")}>
                     <ShieldAlert className="h-3.5 w-3.5 text-amber-600" />
-                    <span>SEO Issues</span>
+                    <span>SEO Issues Center</span>
                   </Link>
                   <Link href="/admin/seo/pages" onClick={onMobileClose} className={navItemClass("/admin/seo/pages")}>
-                    <FileText className="h-3.5 w-3.5" />
-                    <span>Pages Explorer</span>
+                    <FileText className="h-3.5 w-3.5 text-blue-600" />
+                    <span>Pages SEO Explorer</span>
                   </Link>
                   <Link href="/admin/seo/search-console" onClick={onMobileClose} className={navItemClass("/admin/seo/search-console")}>
-                    <BarChart className="h-3.5 w-3.5 text-blue-600" />
-                    <span>Search Console</span>
+                    <BarChart className="h-3.5 w-3.5 text-emerald-600" />
+                    <span>Google Search Console</span>
                   </Link>
                   <Link href="/admin/seo/keywords" onClick={onMobileClose} className={navItemClass("/admin/seo/keywords")}>
-                    <TrendingUp className="h-3.5 w-3.5" />
-                    <span>Keywords</span>
+                    <TrendingUp className="h-3.5 w-3.5 text-indigo-600" />
+                    <span>Keywords & Rankings</span>
                   </Link>
                   <Link href="/admin/seo/indexing" onClick={onMobileClose} className={navItemClass("/admin/seo/indexing")}>
-                    <Globe className="h-3.5 w-3.5" />
-                    <span>Indexing</span>
+                    <Globe className="h-3.5 w-3.5 text-cyan-600" />
+                    <span>Indexation Coverage</span>
                   </Link>
                   <Link href="/admin/seo/web-vitals" onClick={onMobileClose} className={navItemClass("/admin/seo/web-vitals")}>
                     <Activity className="h-3.5 w-3.5 text-[#00a896]" />
                     <span>Core Web Vitals</span>
                   </Link>
                   <Link href="/admin/seo/technical" onClick={onMobileClose} className={navItemClass("/admin/seo/technical")}>
-                    <Settings className="h-3.5 w-3.5" />
-                    <span>Technical SEO</span>
+                    <Settings className="h-3.5 w-3.5 text-slate-600" />
+                    <span>Technical SEO Audits</span>
                   </Link>
                   <Link href="/admin/seo/internal-links" onClick={onMobileClose} className={navItemClass("/admin/seo/internal-links")}>
-                    <FolderTree className="h-3.5 w-3.5" />
-                    <span>Internal Links</span>
+                    <FolderTree className="h-3.5 w-3.5 text-teal-600" />
+                    <span>Internal Link Analyzer</span>
                   </Link>
                   <Link href="/admin/seo/broken-links" onClick={onMobileClose} className={navItemClass("/admin/seo/broken-links")}>
                     <ShieldAlert className="h-3.5 w-3.5 text-red-600" />
-                    <span>Broken Links</span>
+                    <span>Broken Link Checker</span>
                   </Link>
                   <Link href="/admin/seo/images" onClick={onMobileClose} className={navItemClass("/admin/seo/images")}>
-                    <ImageIcon className="h-3.5 w-3.5" />
-                    <span>Image SEO</span>
+                    <ImageIcon className="h-3.5 w-3.5 text-purple-600" />
+                    <span>Image SEO & ALT Audit</span>
                   </Link>
                   <Link href="/admin/seo/schema" onClick={onMobileClose} className={navItemClass("/admin/seo/schema")}>
                     <FileCheck className="h-3.5 w-3.5 text-teal-600" />
-                    <span>Schema Analyzer</span>
+                    <span>Schema JSON-LD Validator</span>
                   </Link>
                   <Link href="/admin/seo/sitemap" onClick={onMobileClose} className={navItemClass("/admin/seo/sitemap")}>
-                    <FolderTree className="h-3.5 w-3.5" />
-                    <span>Sitemap Manager</span>
+                    <FolderTree className="h-3.5 w-3.5 text-emerald-600" />
+                    <span>XML Sitemap Manager</span>
                   </Link>
                   <Link href="/admin/seo/robots" onClick={onMobileClose} className={navItemClass("/admin/seo/robots")}>
-                    <ShieldCheck className="h-3.5 w-3.5" />
-                    <span>Robots.txt</span>
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                    <span>Robots.txt Inspector</span>
                   </Link>
                   <Link href="/admin/seo/redirects" onClick={onMobileClose} className={navItemClass("/admin/seo/redirects")}>
-                    <ArrowRightLeft className="h-3.5 w-3.5" />
-                    <span>URL Redirects</span>
+                    <ArrowRightLeft className="h-3.5 w-3.5 text-blue-600" />
+                    <span>URL Redirects (301/302)</span>
                   </Link>
                   <Link href="/admin/seo/404-monitor" onClick={onMobileClose} className={navItemClass("/admin/seo/404-monitor")}>
                     <ShieldAlert className="h-3.5 w-3.5 text-red-500" />
-                    <span>404 Monitor</span>
+                    <span>404 Log Monitor</span>
                   </Link>
                   <Link href="/admin/seo/history" onClick={onMobileClose} className={navItemClass("/admin/seo/history")}>
-                    <History className="h-3.5 w-3.5" />
-                    <span>Audit History</span>
+                    <History className="h-3.5 w-3.5 text-slate-600" />
+                    <span>Audit History & Trends</span>
                   </Link>
                   <Link href="/admin/seo/settings" onClick={onMobileClose} className={navItemClass("/admin/seo/settings")}>
-                    <Settings className="h-3.5 w-3.5" />
-                    <span>SEO Settings</span>
+                    <Settings className="h-3.5 w-3.5 text-slate-600" />
+                    <span>SEO Command Settings</span>
                   </Link>
                 </div>
               )}
