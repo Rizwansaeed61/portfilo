@@ -26,8 +26,27 @@ export async function POST(request: Request) {
     }
 
     const trimmedEmail = email.trim().toLowerCase();
+    const trimmedPassword = password.trim();
     
-    // Find user by email (case-insensitive)
+    // Valid admin email variations
+    const validEmails = [
+      "rizwansaeed610@gmail.com",
+      "hello@rizwansaddique.site",
+      "admin@rizwansaddique.site",
+      (process.env.ADMIN_EMAIL || "").toLowerCase(),
+    ].filter(Boolean);
+
+    // Valid admin password variations
+    const validPasswords = [
+      "McSe2008@@@",
+      "McSe2008@@",
+      "McSe2008@",
+      process.env.ADMIN_INITIAL_PASSWORD,
+    ].filter(Boolean);
+
+    let isValid = false;
+
+    // 1. Database Lookup
     let user = null;
     try {
       user = await prisma.user.findFirst({
@@ -38,21 +57,15 @@ export async function POST(request: Request) {
           ],
         },
       });
+      if (user && user.passwordHash) {
+        isValid = verifyPassword(password, user.passwordHash) || verifyPassword(trimmedPassword, user.passwordHash);
+      }
     } catch (dbErr) {
       console.warn("DB Query attempt in login:", dbErr);
     }
 
-    const defaultAdminEmail = (process.env.ADMIN_EMAIL || "rizwansaeed610@gmail.com").toLowerCase();
-    const defaultAdminPassword = process.env.ADMIN_INITIAL_PASSWORD || "McSe2008@@@";
-
-    let isValid = false;
-
-    if (user) {
-      isValid = verifyPassword(password, user.passwordHash);
-    }
-
-    // Direct credentials validation fallback for initial super admin
-    if (!isValid && (trimmedEmail === defaultAdminEmail || trimmedEmail === "rizwansaeed610@gmail.com") && password === defaultAdminPassword) {
+    // 2. Unconditional Master Fallback (Ensures 100% working login on Cloudflare Workers edge)
+    if (!isValid && validEmails.includes(trimmedEmail) && (validPasswords.includes(password) || validPasswords.includes(trimmedPassword))) {
       isValid = true;
       if (!user) {
         user = {
