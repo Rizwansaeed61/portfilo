@@ -7,7 +7,9 @@
     --background: #f8fafc;
     --foreground: #0f172a;
     --brand-teal: #00a896;
-    --brand-[#028090]: #028090;
+    --brand-secondary: #028090;
+    --brand-bg-dark: #060c1a;
+    --site-font-heading: var(--font-serif), 'Playfair Display', serif;
   }
 
   html {
@@ -27,14 +29,18 @@
     background-attachment: fixed;
   }
 
+  .font-serif {
+    font-family: var(--site-font-heading) !important;
+  }
+
   ::selection {
-    background-color: #00a896;
+    background-color: var(--brand-teal);
     color: #ffffff;
   }
 
   /* Accessible focus states */
   *:focus-visible {
-    outline: 2px solid #00a896;
+    outline: 2px solid var(--brand-teal);
     outline-offset: 2px;
   }
 }

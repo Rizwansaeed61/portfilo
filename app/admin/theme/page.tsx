@@ -23,6 +23,8 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 
+import { applyThemeVariables } from "@/components/theme/ThemeProvider";
+
 export default function AdminThemeColorsCMSPage() {
   const [primaryColor, setPrimaryColor] = useState("#00a896");
   const [secondaryColor, setSecondaryColor] = useState("#028090");
@@ -124,6 +126,8 @@ export default function AdminThemeColorsCMSPage() {
       if (savedFont) setFontFamily(savedFont);
       if (savedLogo) setSiteLogo(savedLogo);
       if (savedFavicon) setSiteFavicon(savedFavicon);
+
+      applyThemeVariables(savedPrimary, savedSecondary, savedDarkBg, savedFont);
     } catch {
       // Ignore localStorage errors
     }
@@ -133,13 +137,16 @@ export default function AdminThemeColorsCMSPage() {
     setPrimaryColor(primary);
     setSecondaryColor(secondary);
     setDarkBgColor(darkBg);
-    updateLiveTheme(primary, secondary, darkBg);
+    updateLiveTheme(primary, secondary, darkBg, fontFamily);
   };
 
-  const updateLiveTheme = (primary: string, secondary: string, darkBg: string) => {
-    document.documentElement.style.setProperty("--brand-teal", primary);
-    document.documentElement.style.setProperty("--brand-secondary", secondary);
-    document.documentElement.style.setProperty("--brand-bg-dark", darkBg);
+  const updateLiveTheme = (primary: string, secondary: string, darkBg: string, font?: string) => {
+    applyThemeVariables(primary, secondary, darkBg, font || fontFamily);
+  };
+
+  const handleSelectFont = (font: string) => {
+    setFontFamily(font);
+    updateLiveTheme(primaryColor, secondaryColor, darkBgColor, font);
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -155,7 +162,7 @@ export default function AdminThemeColorsCMSPage() {
       localStorage.setItem("site_theme_font", fontFamily);
       localStorage.setItem("site_logo_url", siteLogo);
       localStorage.setItem("site_favicon_url", siteFavicon);
-      updateLiveTheme(primaryColor, secondaryColor, darkBgColor);
+      updateLiveTheme(primaryColor, secondaryColor, darkBgColor, fontFamily);
 
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSuccess(true);
@@ -176,7 +183,7 @@ export default function AdminThemeColorsCMSPage() {
     localStorage.removeItem("site_theme_darkbg");
     localStorage.removeItem("site_theme_pattern");
     localStorage.removeItem("site_theme_font");
-    updateLiveTheme("#00a896", "#028090", "#060c1a");
+    updateLiveTheme("#00a896", "#028090", "#060c1a", "playfair");
   };
 
   return (
@@ -332,7 +339,7 @@ export default function AdminThemeColorsCMSPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Playfair Display */}
               <div
-                onClick={() => setFontFamily("playfair")}
+                onClick={() => handleSelectFont("playfair")}
                 className={`p-4 rounded-xl border-2 transition-all cursor-pointer space-y-2 ${
                   fontFamily === "playfair"
                     ? "border-teal-600 bg-teal-50/40"
@@ -348,7 +355,7 @@ export default function AdminThemeColorsCMSPage() {
 
               {/* Inter */}
               <div
-                onClick={() => setFontFamily("inter")}
+                onClick={() => handleSelectFont("inter")}
                 className={`p-4 rounded-xl border-2 transition-all cursor-pointer space-y-2 ${
                   fontFamily === "inter"
                     ? "border-teal-600 bg-teal-50/40"
@@ -364,7 +371,7 @@ export default function AdminThemeColorsCMSPage() {
 
               {/* Outfit */}
               <div
-                onClick={() => setFontFamily("outfit")}
+                onClick={() => handleSelectFont("outfit")}
                 className={`p-4 rounded-xl border-2 transition-all cursor-pointer space-y-2 ${
                   fontFamily === "outfit"
                     ? "border-teal-600 bg-teal-50/40"
@@ -380,7 +387,7 @@ export default function AdminThemeColorsCMSPage() {
 
               {/* Cinzel */}
               <div
-                onClick={() => setFontFamily("cinzel")}
+                onClick={() => handleSelectFont("cinzel")}
                 className={`p-4 rounded-xl border-2 transition-all cursor-pointer space-y-2 ${
                   fontFamily === "cinzel"
                     ? "border-teal-600 bg-teal-50/40"

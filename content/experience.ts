@@ -6,6 +6,8 @@ export interface ExperienceRole {
   period: string;
   isCurrent?: boolean;
   isFeatured?: boolean;
+  active?: boolean;
+  displayOrder?: number;
   responsibilities: string[];
 }
 
