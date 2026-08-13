@@ -13,17 +13,36 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [customLogo, setCustomLogo] = useState<string | null>(null);
+  const [navItems, setNavItems] = useState(mainNavigation);
   const pathname = usePathname();
 
-  useEffect(() => {
+  const loadDynamicNav = () => {
     try {
       const savedLogo = localStorage.getItem("site_logo_url");
       if (savedLogo) {
         setCustomLogo(savedLogo);
       }
+
+      const savedNav = localStorage.getItem("header_navigation_cms");
+      if (savedNav) {
+        const parsed = JSON.parse(savedNav);
+        const activeItems = parsed
+          .filter((item: any) => item.active)
+          .map((item: any) => ({ label: item.label, href: item.href }));
+        if (activeItems.length > 0) {
+          setNavItems(activeItems);
+        }
+      }
     } catch {
       // Fallback
     }
+  };
+
+  useEffect(() => {
+    loadDynamicNav();
+    const handleUpdate = () => loadDynamicNav();
+    window.addEventListener("header_nav_updated", handleUpdate);
+    return () => window.removeEventListener("header_nav_updated", handleUpdate);
   }, []);
 
   // Scroll detection
@@ -111,7 +130,7 @@ export function Header() {
 
             {/* Desktop Navigation Links */}
             <nav className="hidden lg:flex items-center gap-7" aria-label="Main Navigation">
-              {mainNavigation.map((item) => {
+              {navItems.map((item) => {
                 const isActive = pathname === item.href || (item.href === "/" && pathname === "/");
                 return (
                   <Link
@@ -189,7 +208,7 @@ export function Header() {
               </div>
 
               <nav className="flex flex-col space-y-1.5" aria-label="Mobile Navigation">
-                {mainNavigation.map((item) => {
+                {navItems.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link

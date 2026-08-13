@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle2, Save, Navigation, Plus, Trash2, MoveUp, MoveDown } from "lucide-react";
@@ -16,16 +16,27 @@ interface NavLinkItem {
 export default function AdminNavigationCMSPage() {
   const [navItems, setNavItems] = useState<NavLinkItem[]>([
     { id: "1", label: "Home", href: "/", external: false, active: true },
-    { id: "2", label: "Services", href: "/services", external: false, active: true },
-    { id: "3", label: "Results", href: "/results", external: false, active: true },
-    { id: "4", label: "Experience", href: "/about#experience", external: false, active: true },
-    { id: "5", label: "About", href: "/about", external: false, active: true },
-    { id: "6", label: "Insights", href: "/insights", external: false, active: true },
+    { id: "2", label: "About", href: "/about", external: false, active: true },
+    { id: "3", label: "Services", href: "/services", external: false, active: true },
+    { id: "4", label: "Projects", href: "/projects", external: false, active: true },
+    { id: "5", label: "Process", href: "/process", external: false, active: true },
+    { id: "6", label: "Blog", href: "/insights", external: false, active: true },
     { id: "7", label: "Contact", href: "/contact", external: false, active: true },
   ]);
 
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("header_navigation_cms");
+      if (saved) {
+        setNavItems(JSON.parse(saved));
+      }
+    } catch {
+      // Fallback
+    }
+  }, []);
 
   const handleItemChange = (id: string, field: keyof NavLinkItem, value: any) => {
     setNavItems((prev) =>
@@ -65,7 +76,8 @@ export default function AdminNavigationCMSPage() {
     setSuccess(false);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      localStorage.setItem("header_navigation_cms", JSON.stringify(navItems));
+      window.dispatchEvent(new CustomEvent("header_nav_updated"));
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3500);
     } finally {
