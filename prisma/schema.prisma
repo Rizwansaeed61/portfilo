@@ -325,6 +325,83 @@ model SEOSetting {
   updatedAt             DateTime @updatedAt
 }
 
+model SEOScan {
+  id                  String     @id @default(cuid())
+  scanType            String     @default("FULL") // FULL | QUICK | PAGE
+  status              String     @default("COMPLETED") // COMPLETED | RUNNING | FAILED
+  startedAt           DateTime   @default(now())
+  completedAt         DateTime?
+  durationSeconds     Int        @default(0)
+  pagesScanned        Int        @default(0)
+  pagesIndexable      Int        @default(0)
+  pagesNonIndexable   Int        @default(0)
+  brokenLinksCount    Int        @default(0)
+  criticalIssuesCount Int        @default(0)
+  highIssuesCount     Int        @default(0)
+  mediumIssuesCount   Int        @default(0)
+  lowIssuesCount      Int        @default(0)
+  seoScore            Int        @default(100)
+  pages               SEOPage[]
+  issues              SEOIssue[]
+}
+
+model SEOPage {
+  id                     String    @id @default(cuid())
+  scanId                 String?
+  scan                   SEOScan?  @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  url                    String
+  normalizedUrl          String
+  statusCode             Int       @default(200)
+  title                  String?
+  titleLength            Int       @default(0)
+  metaDescription        String?
+  metaDescriptionLength  Int       @default(0)
+  canonicalUrl           String?
+  h1Text                 String?
+  h1Count                Int       @default(0)
+  wordCount              Int       @default(0)
+  indexabilityStatus     String    @default("INDEXABLE")
+  indexabilityReason     String?
+  noIndex                Boolean   @default(false)
+  noFollow               Boolean   @default(false)
+  seoScore               Int       @default(100)
+  internalInboundLinks   Int       @default(0)
+  internalOutboundLinks  Int       @default(0)
+  brokenLinksCount       Int       @default(0)
+  imagesMissingAltCount  Int       @default(0)
+  schemaTypesJson        String?   // JSON array of schema types
+  responseTimeMs         Int       @default(0)
+  crawledAt              DateTime  @default(now())
+}
+
+model SEOIssue {
+  id            String   @id @default(cuid())
+  scanId        String?
+  scan          SEOScan? @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  issueCode     String
+  name          String
+  category      String
+  severity      String   // CRITICAL | HIGH | MEDIUM | LOW
+  priority      String   // P1 | P2 | P3 | P4
+  explanation   String
+  whyItMatters  String
+  howToFix      String
+  affectedUrls  String   // JSON array of affected URLs
+  status        String   @default("OPEN")
+  firstDetected DateTime @default(now())
+  lastDetected  DateTime @default(now())
+}
+
+model SEO404Log {
+  id         String   @id @default(cuid())
+  url        String   @unique
+  hits       Int      @default(1)
+  referrer   String?
+  lastSeenAt DateTime @default(now())
+  status     String   @default("LOGGED") // LOGGED | REDIRECTED | IGNORED
+}
+
+
 model SocialLink {
   id           String   @id @default(cuid())
   platform     String
