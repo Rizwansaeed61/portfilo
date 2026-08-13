@@ -72,21 +72,28 @@ export function FloatingChatWidget() {
 
   const timeSlots = ["10:00 AM (UAE)", "11:30 AM (PKT)", "03:00 PM (EST)", "06:30 PM (BST)"];
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!bookingForm.name.trim() || !bookingForm.email.trim()) return;
 
-    // Store booking record locally
+    const newBooking = {
+      id: `book-${Date.now()}`,
+      date: selectedDate,
+      timeSlot: selectedSlot,
+      ...bookingForm,
+      createdAt: new Date().toISOString(),
+      status: "CONFIRMED",
+    };
+
+    // Store booking record in DB & locally
     try {
+      await fetch("/api/admin/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newBooking),
+      });
+
       const existing = JSON.parse(localStorage.getItem("admin_calendar_bookings") || "[]");
-      const newBooking = {
-        id: `book-${Date.now()}`,
-        date: selectedDate,
-        timeSlot: selectedSlot,
-        ...bookingForm,
-        createdAt: new Date().toISOString(),
-        status: "CONFIRMED",
-      };
       localStorage.setItem("admin_calendar_bookings", JSON.stringify([newBooking, ...existing]));
     } catch {
       // Fallback

@@ -54,33 +54,28 @@ export default function AdminChatWidgetControlPage() {
         setCmsConfig((prev) => ({ ...prev, ...JSON.parse(savedConfig) }));
       }
 
-      const savedBookings = localStorage.getItem("admin_calendar_bookings");
-      if (savedBookings) {
-        setBookings(JSON.parse(savedBookings));
-      } else {
-        // Initial sample booking fallback
-        const samples: BookingItem[] = [
-          {
-            id: "book-sample-1",
-            date: "2026-08-15",
-            timeSlot: "11:00 AM (UAE)",
-            name: "John Miller",
-            email: "john@techgrowth.io",
-            phone: "+971 50 123 4567",
-            topic: "Meta Ads & E-Commerce Scaling",
-            createdAt: new Date().toISOString(),
-            status: "CONFIRMED",
-          },
-        ];
-        setBookings(samples);
-        localStorage.setItem("admin_calendar_bookings", JSON.stringify(samples));
-      }
+      // Fetch bookings from Prisma DB
+      fetch("/api/admin/bookings")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.bookings && data.bookings.length > 0) {
+            setBookings(data.bookings);
+            localStorage.setItem("admin_calendar_bookings", JSON.stringify(data.bookings));
+          } else {
+            const savedBookings = localStorage.getItem("admin_calendar_bookings");
+            if (savedBookings) setBookings(JSON.parse(savedBookings));
+          }
+        })
+        .catch(() => {
+          const savedBookings = localStorage.getItem("admin_calendar_bookings");
+          if (savedBookings) setBookings(JSON.parse(savedBookings));
+        });
     } catch {
       // Fallback
     }
   }, []);
 
-  const persistBookings = (updatedList: BookingItem[]) => {
+  const persistBookings = async (updatedList: BookingItem[]) => {
     setBookings(updatedList);
     try {
       localStorage.setItem("admin_calendar_bookings", JSON.stringify(updatedList));
@@ -124,7 +119,7 @@ export default function AdminChatWidgetControlPage() {
     setIsModalOpen(true);
   };
 
-  const handleSaveBookingModal = (e: React.FormEvent) => {
+  const handleSaveBookingModal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim()) return;
 
@@ -137,13 +132,28 @@ export default function AdminChatWidgetControlPage() {
       setSuccess("New appointment logged successfully!");
     }
 
+    try {
+      await fetch("/api/admin/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+    } catch {
+      // Fallback
+    }
+
     persistBookings(updated);
     setIsModalOpen(false);
     setTimeout(() => setSuccess(""), 3500);
   };
 
-  const handleDeleteBooking = (id: string) => {
+  const handleDeleteBooking = async (id: string) => {
     const updated = bookings.filter((b) => b.id !== id);
+    try {
+      await fetch(`/api/admin/bookings?id=${id}`, { method: "DELETE" });
+    } catch {
+      // Fallback
+    }
     persistBookings(updated);
     setSuccess("Appointment removed successfully!");
     setTimeout(() => setSuccess(""), 3500);
