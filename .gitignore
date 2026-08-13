@@ -36,3 +36,5 @@ next-env.d.ts
 *.db
 *.tar.gz
 
+# open-next / cloudflare
+/.open-next/
