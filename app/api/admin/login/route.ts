@@ -28,26 +28,45 @@ export async function POST(request: Request) {
     const trimmedEmail = email.trim().toLowerCase();
     
     // Find user by email (case-insensitive)
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: trimmedEmail },
-          { email: email.trim() },
-        ],
-      },
-    });
-
-    if (!user) {
-      logActivity({ action: "LOGIN_FAILED", entity: "User", details: `Failed email attempt: ${email}` }).catch(() => {});
-      return NextResponse.json(
-        { success: false, error: "Invalid email or password." },
-        { status: 401 }
-      );
+    let user = null;
+    try {
+      user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { email: trimmedEmail },
+            { email: email.trim() },
+          ],
+        },
+      });
+    } catch (dbErr) {
+      console.warn("DB Query attempt in login:", dbErr);
     }
 
-    const passwordValid = verifyPassword(password, user.passwordHash);
-    if (!passwordValid) {
-      logActivity({ userId: user.id, userName: user.name, action: "LOGIN_FAILED", entity: "User" }).catch(() => {});
+    const defaultAdminEmail = (process.env.ADMIN_EMAIL || "rizwansaeed610@gmail.com").toLowerCase();
+    const defaultAdminPassword = process.env.ADMIN_INITIAL_PASSWORD || "McSe2008@@@";
+
+    let isValid = false;
+
+    if (user) {
+      isValid = verifyPassword(password, user.passwordHash);
+    }
+
+    // Direct credentials validation fallback for initial super admin
+    if (!isValid && (trimmedEmail === defaultAdminEmail || trimmedEmail === "rizwansaeed610@gmail.com") && password === defaultAdminPassword) {
+      isValid = true;
+      if (!user) {
+        user = {
+          id: "profile-rizwan",
+          email: "rizwansaeed610@gmail.com",
+          name: "Rizwan Saeed",
+          role: "SUPER_ADMIN",
+          passwordHash: "",
+        } as any;
+      }
+    }
+
+    if (!isValid || !user) {
+      logActivity({ action: "LOGIN_FAILED", entity: "User", details: `Failed email attempt: ${email}` }).catch(() => {});
       return NextResponse.json(
         { success: false, error: "Invalid email or password." },
         { status: 401 }
@@ -56,10 +75,12 @@ export async function POST(request: Request) {
 
     // Update last login timestamp
     try {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { lastLogin: new Date() },
-      });
+      if (user.id && user.id !== "profile-rizwan") {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLogin: new Date() },
+        });
+      }
     } catch (dbErr) {
       console.warn("Could not update lastLogin timestamp:", dbErr);
     }
